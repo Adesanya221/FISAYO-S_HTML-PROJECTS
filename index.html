@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<!-- 
+    Week 1 Lab Exercise - Overview of HTML and CSS
+    Task: Recreating the Contact Us page from the Contoso Conferencing Demo
+    Lesson 1: Overview of HTML - Covered HTML structure, elements, attributes,
+    forms, links, images, and attaching scripts.
+    Lab: Explored the Contoso Conference Application and examined how HTML, CSS,
+    and JavaScript work together to build a real web application.
+    Status: COMPLETED ✓
+-->
+
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Page title as shown in the browser tab -->
+    <title>Contact Us</title>
+</head>
+
+<body>
+
+    <!-- Level 1 heading - learned from "Displaying Text in HTML" section -->
+    <h1>Contact Contoso Conferencing</h1>
+
+    <!-- Paragraph elements used to display company address -->
+    <p>Contoso Conferencing Ltd.</p>
+
+    <!-- Using <br /> line break elements to format address on separate lines -->
+    <!-- <em> used for emphasis (renders in italics) as covered in the Emphasis section -->
+    <p>123 South Street<br />
+        Somewhere<br />
+        Over There<br />
+        <em>USA</em>
+    </p>
+
+    <!-- Anchor <a> tag with mailto: protocol to create a clickable email link -->
+    <!-- Learned from "Hypertext Links" section - href can point to emails too -->
+    <p>
+        <a href="mailto:contact@contoso.com">contact@contoso.com</a>
+    </p>
+
+    <!-- <strong> used for bold/important text as covered in the Emphasis section -->
+    <p>
+        If you would like to contact Contoso Conferencing, whether you're interested in our
+        services or in a conference we're currently organizing, don't hesitate to contact us
+        using our enquiry form (<strong>Bold fields</strong> are required).
+    </p>
+
+    <!-- 
+        FORM SECTION
+        Learned from "Gathering User Input by Using Forms in HTML"
+        - method="Post" sends data securely to the server (POST preferred over GET)
+        - action="support.aspx" is the URL where the form data gets sent
+    -->
+    <form method="Post" action="support.aspx">
+
+        <!-- <fieldset> groups related form controls together with a border box -->
+        <!-- <legend> labels the fieldset group - must be the first child -->
+        <fieldset>
+            <legend>Your Details and Enquiry</legend>
+
+            <!-- Ordered list used to layout the form fields neatly -->
+            <ol>
+
+                <!-- <label> links text to its input field for better usability -->
+                <!-- <strong> makes "Name" bold to show it is a required field -->
+                <li>
+                    <label>
+                        <strong>Name</strong><br />
+                        <!-- input type="text" creates a single-line text box -->
+                        <input type="text" name="UserName" />
+                    </label>
+                </li>
+
+                <li>
+                    <label>
+                        Telephone<br />
+                        <input type="text" name="Phone" />
+                    </label>
+                </li>
+
+                <li>
+                    <label>
+                        Email Address<br />
+                        <!-- input type="text" for email address field -->
+                        <input type="text" name="Email" />
+                    </label>
+                </li>
+
+                <!-- <textarea> creates a multiline text box for longer messages -->
+                <!-- cols and rows set the visible size of the text area -->
+                <li>
+                    <label>
+                        <strong>Message</strong><br />
+                        <textarea name="Message" cols="30" rows="10">Add your message here</textarea>
+                    </label>
+                </li>
+
+                <!-- Submit button to send the form data -->
+                <!-- Learned: <button> is preferred over <input type="submit"> 
+                     when content needs to be more than simple text -->
+                <li>
+                    <button type="submit">Send</button>
+                </li>
+
+            </ol>
+        </fieldset>
+
+    </form>
+
+</body>
+<!-- End of Week 1 Lab - Fisayo Adesanya -->
+
+</html>

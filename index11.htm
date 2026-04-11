@@ -1,51 +1,22 @@
 <!DOCTYPE html>
-<!--
-    Module 2 Lab Exercise - Creating and Styling HTML5 Pages
-    Task: Build the ContosoConf Home Page using HTML5 semantic elements
-    Topics covered:
-      - HTML5 new elements: header, nav, section, footer, article
-      - Images using <img> with alt attributes
-      - Navigation links using <nav>
-      - Linking an external CSS stylesheet
-    Status: COMPLETED ✓
-    Author: Fisayo Adesanya
--->
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Page title displayed in the browser tab -->
     <title>ContosoConf - Home</title>
-
-    <!--
-        Linking external CSS stylesheet - learned from Module 2 Lesson 2
-        Best practice: always use a <link> element to reference external stylesheets
-        rather than inline styles, so the same styles apply across multiple pages
-    -->
     <link href="styles/site.css" rel="stylesheet" type="text/css" />
 </head>
 
 <body>
 
-    <!--
-        <nav> element - HTML5 semantic element for navigation menus
-        Learned from Module 2: replaces the old HTML4 approach of <ul id="navigation">
-        The <nav> element gives the navigation area semantic meaning
-    -->
     <nav>
         <div class="container">
-            <!-- Navigation links to both pages of the site -->
-            <a href="/module2/index.htm">Home</a>
-            <a href="/module2/about.htm">About</a>
+            <a href="index.htm">Home</a>
+            <a href="about.htm">About</a>
         </div>
     </nav>
 
-    <!--
-        <header> element - HTML5 semantic element for the page header
-        Contains the site name and tagline
-        Replaces old HTML4 approach of <div id="header">
-    -->
     <header>
         <div class="container">
             <h1>ContosoConf</h1>
@@ -53,82 +24,56 @@
         </div>
     </header>
 
-    <!--
-        <section> element - HTML5 semantic element for grouping related content
-        Used here to separate distinct content blocks on the home page
-    -->
-
-    <!-- Introduction / body text section -->
     <section>
         <div class="container">
             <p>
                 The web keeps evolving. There's a wealth of new technologies to keep up with!
-                ContosoConf is an in-depth exploration of HTML5, CSS3 and JavaScript, in the heart of Seattle, WA.
+                ContosoConf is an in-depth exploration of HTML5, CSS3 and JavaScript,
+                in the heart of Seattle, WA.
             </p>
             <p>Don't miss the best speakers in the business, talking about the future of the web.</p>
         </div>
     </section>
 
-    <!-- Speakers section -->
     <section>
         <div class="container">
             <h2>Featuring these excellent speakers</h2>
-
-            <!--
-                <img> element - learned in Module 1 and applied here
-                Required attribute: src (image path) and alt (text alternative)
-                alt attribute is important for accessibility and SEO
-            -->
             <ul>
                 <li>
-                    <img src="images/speakers/melissa-kerr.jpg" alt="Melissa Kerr" />
-                    Melissa Kerr
+                    <img src="image/10001 (1).jpg" alt="Melissa Kerr" width="100" height="100" />
+                    <p>Melissa Kerr</p>
                 </li>
                 <li>
-                    <img src="images/speakers/david-alexander.jpg" alt="David Alexander" />
-                    David Alexander
+                    <img src="image/10001 (1).jpg" alt="David Alexander" width="100" height="100" />
+                    <p>David Alexander</p>
                 </li>
                 <li>
-                    <img src="images/speakers/mark-hanson.jpg" alt="Mark Hanson" />
-                    Mark Hanson
+                    <img src="image/10001 (1).jpg" alt="Mark Hanson" width="100" height="100" />
+                    <p>Mark Hanson</p>
                 </li>
                 <li>
-                    <img src="images/speakers/april-meyer.jpg" alt="April Meyer" />
-                    April Meyer
+                    <img src="image/10001 (1).jpg" alt="April Meyer" width="100" height="100" />
+                    <p>April Meyer</p>
                 </li>
             </ul>
         </div>
     </section>
 
-    <!-- Sponsors section -->
     <section>
         <div class="container">
             <h2>Thanks to our sponsors</h2>
             <ul>
                 <li>
-                    <img src="images/sponsors/trey-research.png" alt="Trey Research" />
+                    <img src="image/10001 (1).jpg" alt="Trey Research" width="120" height="60" />
                 </li>
                 <li>
-                    <img src="images/sponsors/litware.png" alt="Litware, Inc" />
+                    <img src="image/10001 (1).jpg" alt="Litware, Inc" width="120" height="60" />
                 </li>
-                <li>
-                    <img src="images/sponsors/fourth-coffee.png" alt="Fourth Coffee" />
-                </li>
-                <li>
-                    <img src="images/sponsors/graphic-design-institute.png" alt="Graphic Design Institute" />
-                </li>
-                <li>
-                    <img src="images/sponsors/southridge-video.png" alt="Southridge Video" />
-                </li>
+                
             </ul>
         </div>
     </section>
 
-    <!--
-        <footer> element - HTML5 semantic element for the page footer
-        Typically contains copyright, address, and supplementary links
-        Replaces old HTML4 approach of <div id="footer">
-    -->
     <footer>
         <div class="container">
             <p>Hosted by Contoso</p>
@@ -143,6 +88,5 @@
     </footer>
 
 </body>
-<!-- End of Module 2 Lab - Home Page - Fisayo Adesanya -->
 
 </html>

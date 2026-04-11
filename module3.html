@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Lesson 1 – JavaScript Basics | Fisayo</title>
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 700px; margin: 40px auto; padding: 0 20px; }
+    h2 { color: #333; border-bottom: 2px solid #6c63ff; padding-bottom: 6px; }
+    .output { background: #f0f0f0; padding: 10px; border-radius: 6px; margin-top: 8px; }
+  </style>
+</head>
+<body>
+
+  <h1>Fisayo's JS Lesson 1 Playground</h1>
+
+  <!-- ========================
+       1. VARIABLES & DATA TYPES
+  ========================= -->
+  <h2>1. Variables & Data Types</h2>
+  <div class="output" id="vars-output"></div>
+
+  <script>
+    // Modern JS uses const (won't change) and let (will change)
+    // The module uses var — both work, but const/let is the modern way
+
+    const firstName = "Fisayo";          // String
+    let age = 25;                        // Number
+    const isLearning = true;             // Boolean
+    let futureValue;                     // undefined — declared but no value yet
+    const emptyValue = null;             // null — intentionally empty
+
+    const varsOutput = document.getElementById("vars-output");
+    varsOutput.innerHTML =
+      "Name: " + firstName + "<br>" +
+      "Age: " + age + "<br>" +
+      "Learning JS: " + isLearning + "<br>" +
+      "Future value is: " + futureValue + "<br>" +
+      "Empty value is: " + emptyValue;
+  </script>
+
+  <!-- ========================
+       2. THE == vs === TRAP
+  ========================= -->
+  <h2>2. The == vs === Trap (Key Insight!)</h2>
+  <div class="output" id="operators-output"></div>
+
+  <script>
+    const operatorsOutput = document.getElementById("operators-output");
+
+    // == converts types before comparing (dangerous!)
+    const looseCheck = (0 == false);   // true — 0 gets converted to false
+    // === checks value AND type (always use this)
+    const strictCheck = (0 === false); // false — 0 is a number, false is boolean
+
+    // String + Number = String (not a sum!)
+    const stringPlusNumber = "10" + 10;  // "1010" not 20
+    const actualSum = 10 + 10;           // 20
+
+    operatorsOutput.innerHTML =
+      "0 == false → " + looseCheck + " (loose, dangerous!)<br>" +
+      "0 === false → " + strictCheck + " (strict, safe)<br>" +
+      "'10' + 10 = " + stringPlusNumber + " (string wins!)<br>" +
+      "10 + 10 = " + actualSum + " (both numbers, correct)";
+  </script>
+
+  <!-- ========================
+       3. FUNCTIONS
+  ========================= -->
+  <h2>3. Functions</h2>
+  <div class="output" id="functions-output"></div>
+
+  <script>
+    // A function that calculates a budget (personalised for Fisayo)
+    function calculateMonthlyBudget(income, expenses, savings) {
+      return income - expenses - savings;
+    }
+
+    // Ternary operator — one-line if/else (most beginners don't know this!)
+    const fisayoBudget = calculateMonthlyBudget(150000, 80000, 20000);
+    const budgetStatus = (fisayoBudget > 0) ? "You have money left!" : "You're over budget!";
+
+    document.getElementById("functions-output").innerHTML =
+      "Fisayo's leftover budget: ₦" + fisayoBudget + "<br>" +
+      "Status: " + budgetStatus;
+  </script>
+
+  <!-- ========================
+       4. CONDITIONALS
+  ========================= -->
+  <h2>4. Conditional Statements</h2>
+  <div class="output" id="conditionals-output"></div>
+
+  <script>
+    const score = 75;
+    let grade;
+
+    // if / else if / else
+    if (score >= 70) {
+      grade = "Distinction";
+    } else if (score >= 50) {
+      grade = "Pass";
+    } else {
+      grade = "Fail";
+    }
+
+    // switch — good when checking one variable against many values
+    const day = "Monday";
+    let plan;
+    switch (day.toLowerCase()) {  // .toLowerCase() prevents case-sensitivity bugs
+      case "monday":
+        plan = "Start the week strong, Fisayo!";
+        break;
+      case "friday":
+        plan = "Almost the weekend!";
+        break;
+      default:
+        plan = "Keep grinding!";
+    }
+
+    document.getElementById("conditionals-output").innerHTML =
+      "Score: " + score + " → Grade: " + grade + "<br>" +
+      "Today is " + day + " → " + plan;
+  </script>
+
+  <!-- ========================
+       5. LOOPS
+  ========================= -->
+  <h2>5. Loops</h2>
+  <div class="output" id="loops-output"></div>
+
+  <script>
+    // for loop — most common
+    let loopResult = "for loop: ";
+    for (let i = 1; i <= 5; i++) {
+      loopResult += "Day " + i + " ";
+    }
+
+    // while loop — runs while condition is true
+    let whileResult = "while loop: ";
+    let count = 3;
+    while (count > 0) {
+      whileResult += count + "... ";
+      count--;
+    }
+    whileResult += "Go Fisayo!";
+
+    document.getElementById("loops-output").innerHTML =
+      loopResult + "<br>" + whileResult;
+  </script>
+
+  <!-- ========================
+       6. OBJECTS & JSON
+  ========================= -->
+  <h2>6. Objects & JSON</h2>
+  <div class="output" id="json-output"></div>
+
+  <script>
+    // JSON object — how data is stored and sent on the web
+    const fisayo = {
+      "name": "Fisayo",
+      "role": "Web Developer",
+      "currentModule": 3,
+      "skills": ["HTML", "CSS", "JavaScript"]
+    };
+
+    // Array of objects — a list of people (like a database result)
+    const attendees = [
+      { "name": "Fisayo", "track": "Frontend" },
+      { "name": "Tunde", "track": "Backend" },
+      { "name": "Amara", "track": "Design" }
+    ];
+
+    // JSON.stringify converts object to a string (for sending to a server)
+    const jsonString = JSON.stringify(fisayo);
+
+    document.getElementById("json-output").innerHTML =
+      "Name: " + fisayo.name + "<br>" +
+      "Skills: " + fisayo.skills.join(", ") + "<br>" +
+      "Attendees: " + attendees.map(a => a.name).join(", ") + "<br>" +
+      "As JSON string: " + jsonString;
+  </script>
+
+</body>
+</html>

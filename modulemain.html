@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>FisayoConf — Web Dev Conference</title>
+
+  <style>
+    /* ================================
+       GLOBAL STYLES
+       CSS: font-family, colors, box model
+    ================================ */
+    * {
+      box-sizing: border-box; /* Module 2 — box model */
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, Verdana, sans-serif; /* Module 2 — font-family */
+      font-size: 16px;
+      line-height: 1.6;
+      background-color: #f5f5f5;
+      color: #333;
+    }
+
+    /* ================================
+       NAV — Module 2 (HTML5 nav element)
+       + CSS hover effect (ContosoConf lab)
+    ================================ */
+    nav {
+      background-color: #1a1a2e;
+      padding: 0 40px;
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 4px;
+    }
+
+    nav ul li a {
+      display: block;
+      color: #ccc;
+      text-decoration: none; /* Module 2 — text-decoration */
+      padding: 16px 20px;
+      font-size: 14px;
+      text-transform: uppercase; /* Module 2 — text-transform */
+      letter-spacing: 1px; /* Module 2 — letter-spacing */
+    }
+
+    nav ul li a:hover {
+      background-color: #e94560;
+      color: #fff;
+    }
+
+    nav ul li a.active {
+      background-color: #e94560;
+      color: #fff;
+    }
+
+    /* ================================
+       HEADER — Module 2 HTML5 header element
+    ================================ */
+    header {
+      background-color: #1a1a2e;
+      color: white;
+      padding: 60px 40px 40px;
+      border-bottom: 4px solid #e94560;
+    }
+
+    header h1 {
+      font-size: 48px;
+      font-weight: bold;
+      letter-spacing: 2px;
+    }
+
+    header p {
+      font-size: 18px;
+      color: #aaa;
+      margin-top: 8px;
+    }
+
+    /* Register button — ContosoConf lab (CSS hover/transform effect) */
+    .register-btn {
+      display: inline-block;
+      margin-top: 24px;
+      background-color: #e94560;
+      color: white;
+      padding: 14px 32px;
+      text-decoration: none;
+      font-weight: bold;
+      border-radius: 4px;
+      font-size: 16px;
+      transition: transform 0.3s, background-color 0.3s;
+    }
+
+    .register-btn:hover {
+      transform: scale(1.08) rotate(2deg); /* ContosoConf — CSS rotation on hover */
+      background-color: #c73652;
+    }
+
+    /* ================================
+       MAIN LAYOUT
+    ================================ */
+    main {
+      max-width: 960px;
+      margin: 40px auto;
+      padding: 0 20px;
+    }
+
+    /* ================================
+       SECTION TITLES
+    ================================ */
+    .section-title {
+      font-size: 26px;
+      font-weight: bold;
+      margin-bottom: 20px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid #e94560; /* Module 2 — border */
+      color: #1a1a2e;
+    }
+
+    /* ================================
+       ABOUT SECTION — article + aside
+       Module 2 — HTML5 semantic elements
+    ================================ */
+    #about {
+      margin-bottom: 50px;
+    }
+
+    .about-layout {
+      display: flex;
+      gap: 30px;
+    }
+
+    article.about-main {
+      flex: 2;
+      background: white;
+      padding: 24px; /* Module 2 — padding */
+      border: 1px solid #ddd; /* Module 2 — border */
+      border-radius: 4px;
+    }
+
+    article.about-main p {
+      margin-bottom: 12px;
+      line-height: 1.8; /* Module 2 — line-height */
+    }
+
+    /* Drop capital — like ContosoConf About page */
+    article.about-main p:first-of-type::first-letter {
+      font-size: 48px;
+      font-weight: bold;
+      float: left;
+      line-height: 1;
+      margin-right: 8px;
+      color: #e94560;
+    }
+
+    aside.about-quote {
+      flex: 1;
+      background-color: #1a1a2e;
+      color: white;
+      padding: 24px;
+      border-radius: 4px;
+      font-style: italic;
+      font-size: 18px;
+      line-height: 1.8;
+      display: flex;
+      align-items: center;
+    }
+
+    aside.about-quote::before {
+      content: "\201C";
+      font-size: 60px;
+      color: #e94560;
+      margin-right: 8px;
+      line-height: 1;
+    }
+
+    /* ================================
+       SCHEDULE — Module 3 (JS populates list)
+       ContosoConf lab — schedule page
+    ================================ */
+    #schedule {
+      margin-bottom: 50px;
+    }
+
+    .schedule-list {
+      list-style: none;
+    }
+
+    .schedule-list li {
+      background: white;
+      border: 1px solid #ddd;
+      border-left: 4px solid #e94560; /* Module 2 — one-side border */
+      padding: 16px 20px;
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-radius: 0 4px 4px 0;
+    }
+
+    .schedule-list li .session-name {
+      font-weight: bold;
+      color: #1a1a2e;
+    }
+
+    .schedule-list li .session-track {
+      font-size: 13px;
+      background-color: #e94560;
+      color: white;
+      padding: 4px 12px;
+      border-radius: 20px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    /* ================================
+       SPEAKERS — figure + figcaption
+       Module 2 HTML5 elements
+    ================================ */
+    #speakers {
+      margin-bottom: 50px;
+    }
+
+    .speakers-grid {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    figure.speaker-card {
+      background: white;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      padding: 20px;
+      width: 200px;
+      text-align: center;
+    }
+
+    figure.speaker-card .avatar {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background-color: #1a1a2e;
+      color: white;
+      font-size: 28px;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 12px;
+    }
+
+    figcaption {
+      font-size: 14px;
+      color: #555;
+    }
+
+    figcaption strong {
+      display: block;
+      font-size: 16px;
+      color: #1a1a2e;
+      margin-bottom: 4px;
+    }
+
+    /* ================================
+       REGISTER FORM — ContosoConf lab
+       HTML5 form validation
+    ================================ */
+    #register {
+      margin-bottom: 50px;
+    }
+
+    .register-form {
+      background: white;
+      padding: 32px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      max-width: 500px;
+    }
+
+    .form-group {
+      margin-bottom: 18px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 14px;
+      font-weight: bold;
+      margin-bottom: 6px;
+      color: #1a1a2e;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 15px;
+      font-family: Arial, sans-serif;
+    }
+
+    /* CSS for invalid fields — ContosoConf lab */
+    .form-group input:invalid {
+      border-color: #e94560;
+    }
+
+    .form-group input:valid {
+      border-color: #28a745;
+    }
+
+    .submit-btn {
+      background-color: #e94560;
+      color: white;
+      border: none;
+      padding: 12px 32px;
+      font-size: 16px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .submit-btn:hover {
+      background-color: #c73652;
+    }
+
+    .confirmation {
+      display: none;
+      background-color: #d4edda;
+      border: 1px solid #28a745;
+      color: #155724;
+      padding: 16px 20px;
+      border-radius: 4px;
+      margin-top: 16px;
+      font-weight: bold;
+    }
+
+    /* ================================
+       LIVE Q&A — ContosoConf live page
+       Module 3 — JS DOM manipulation
+    ================================ */
+    #live {
+      margin-bottom: 50px;
+    }
+
+    .live-form {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .live-form input {
+      flex: 1;
+      padding: 10px 14px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 15px;
+      font-family: Arial, sans-serif;
+    }
+
+    .live-form button {
+      background-color: #1a1a2e;
+      color: white;
+      border: none;
+      padding: 10px 24px;
+      border-radius: 4px;
+      font-size: 15px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .live-form button:hover {
+      background-color: #e94560;
+    }
+
+    #questions-list {
+      list-style: none;
+    }
+
+    #questions-list li {
+      background: white;
+      border: 1px solid #ddd;
+      padding: 12px 16px;
+      margin-bottom: 8px;
+      border-radius: 4px;
+      font-size: 15px;
+      color: #333;
+    }
+
+    #questions-list li::before {
+      content: "Q: ";
+      font-weight: bold;
+      color: #e94560;
+    }
+
+    /* ================================
+       FOOTER — Module 2 HTML5 footer
+    ================================ */
+    footer {
+      background-color: #1a1a2e;
+      color: #aaa;
+      text-align: center;
+      padding: 24px 40px;
+      font-size: 14px;
+    }
+
+    footer address {
+      font-style: normal;
+      margin-bottom: 6px;
+    }
+
+    /* ================================
+       RESPONSIVE — section spacing
+    ================================ */
+    @media (max-width: 600px) {
+      .about-layout {
+        flex-direction: column;
+      }
+      .speakers-grid {
+        justify-content: center;
+      }
+      nav ul {
+        flex-wrap: wrap;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- NAV — HTML5 nav element, CSS hover, active class (ContosoConf) -->
+  <nav>
+    <ul>
+      <li><a href="#about" class="active">Home</a></li>
+      <li><a href="#schedule">Schedule</a></li>
+      <li><a href="#speakers">Speakers</a></li>
+      <li><a href="#register">Register</a></li>
+      <li><a href="#live">Live Q&amp;A</a></li>
+    </ul>
+  </nav>
+
+  <!-- HEADER — HTML5 header element -->
+  <header>
+    <h1>FisayoConf</h1>
+    <p>A two-track conference on the latest HTML5, CSS3 &amp; JavaScript developments</p>
+    <!-- CSS hover rotate effect — from ContosoConf Register Free button -->
+    <a href="#register" class="register-btn">Register Free</a>
+  </header>
+
+  <main>
+
+    <!-- ABOUT — HTML5 article + aside (Module 2) -->
+    <section id="about">
+      <h2 class="section-title">About the Conference</h2>
+      <div class="about-layout">
+
+        <article class="about-main">
+          <!-- Drop capital on first letter — like ContosoConf About page -->
+          <p>Since the very first FisayoConf back in 2024, we have been guided by one principle: build the web with care. This conference brings together designers, developers, and creators who believe the web should work for everyone.</p>
+          <p>We cover HTML5, CSS3, and JavaScript — the three core technologies of the modern web. Whether you are a beginner or a seasoned developer, there is something here for you.</p>
+          <p>Don't miss our excellent speakers sharing cutting-edge techniques and real-world experience.</p>
+          <!-- HTML5 time element (Module 2) -->
+          <p><small>Last updated: <time datetime="2025-04-11">April 11, 2025</time></small></p>
+        </article>
+
+        <!-- aside — Module 2 HTML5 aside element, for sidebar quotes -->
+        <aside class="about-quote">
+          I came to FisayoConf not knowing much CSS. I left ready to build anything.
+        </aside>
+
+      </div>
+    </section>
+
+    <!-- SCHEDULE — populated by JS (Module 3 + ContosoConf schedule page) -->
+    <section id="schedule">
+      <h2 class="section-title">Schedule</h2>
+      <!-- This list is empty — JS will populate it (like ContosoConf schedule.js) -->
+      <ul class="schedule-list" id="schedule-list"></ul>
+    </section>
+
+    <!-- SPEAKERS — HTML5 figure + figcaption (Module 2) -->
+    <section id="speakers">
+      <h2 class="section-title">Featured Speakers</h2>
+      <div class="speakers-grid" id="speakers-grid"></div>
+    </section>
+
+    <!-- REGISTER — HTML5 form validation (ContosoConf register page) -->
+    <section id="register">
+      <h2 class="section-title">Register for the Conference</h2>
+      <div class="register-form">
+        <!-- HTML5 built-in validation attributes: required, type, minlength -->
+        <div class="form-group">
+          <label for="firstName">First name</label>
+          <input type="text" id="firstName" placeholder="e.g. Fisayo" required />
+        </div>
+        <div class="form-group">
+          <label for="lastName">Last name</label>
+          <input type="text" id="lastName" placeholder="e.g. Oladele" required />
+        </div>
+        <div class="form-group">
+          <label for="email">Email address</label>
+          <!-- type="email" triggers HTML5 built-in format validation -->
+          <input type="email" id="email" placeholder="fisayo@example.com" required />
+        </div>
+        <div class="form-group">
+          <label for="password">Choose a password</label>
+          <!-- minlength — HTML5 validation (ContosoConf: min 5 chars) -->
+          <input type="password" id="password" minlength="5" placeholder="Min. 5 characters" required />
+        </div>
+        <div class="form-group">
+          <label for="confirmPassword">Confirm your password</label>
+          <input type="password" id="confirmPassword" placeholder="Repeat password" required />
+        </div>
+        <button class="submit-btn" id="registerBtn">Register</button>
+        <!-- Confirmation message — hidden, shown by JS on success -->
+        <div class="confirmation" id="confirmationMsg">
+          Thanks for registering, <span id="registeredName"></span>! See you at FisayoConf!
+        </div>
+      </div>
+    </section>
+
+    <!-- LIVE Q&A — ContosoConf live page, JS DOM manipulation (Module 3) -->
+    <section id="live">
+      <h2 class="section-title">Live Q&amp;A — Ask a Question</h2>
+      <div class="live-form">
+        <input type="text" id="questionInput" placeholder="Type your question here..." />
+        <button id="askBtn">Ask</button>
+      </div>
+      <ul id="questions-list"></ul>
+    </section>
+
+  </main>
+
+  <!-- FOOTER — HTML5 footer element (Module 2) -->
+  <footer>
+    <address>
+      FisayoConf &mdash; Conference Center, 12 Main Street, Lagos, Nigeria
+    </address>
+    <small>&copy; 2025 FisayoConf. Built with HTML5, CSS3 &amp; JavaScript.</small>
+  </footer>
+
+
+  <!-- ================================
+       JAVASCRIPT — Module 3 Concepts:
+       Variables, JSON, loops, functions,
+       DOM manipulation, event listeners
+  ================================= -->
+  <script>
+
+    // ---- 1. JSON DATA (Module 3 — JSON arrays of objects) ----
+
+    // Schedule data — like ContosoConf schedule (JS populates the page)
+    var sessions = [
+      { "name": "Introduction to HTML5", "track": "Track 1" },
+      { "name": "CSS3 Box Model & Layouts", "track": "Track 1" },
+      { "name": "JavaScript & the DOM", "track": "Track 2" },
+      { "name": "Building Forms with Validation", "track": "Track 2" },
+      { "name": "Introduction to jQuery", "track": "Both Tracks" }
+    ];
+
+    // Speakers data — like ContosoConf speakers section
+    var speakers = [
+      { "name": "Fisayo Oladele", "topic": "HTML5 Deep Dive", "initials": "FO" },
+      { "name": "Tunde Bello", "topic": "CSS Mastery", "initials": "TB" },
+      { "name": "Amara Nwosu", "topic": "JS & the DOM", "initials": "AN" },
+      { "name": "David Eze", "topic": "jQuery & AJAX", "initials": "DE" }
+    ];
+
+
+    // ---- 2. POPULATE SCHEDULE (Module 3 — for loop + DOM createElement) ----
+
+    function loadSchedule() {
+      var list = document.getElementById("schedule-list");
+
+      // for loop — Module 3
+      for (var i = 0; i < sessions.length; i++) {
+        var session = sessions[i];
+
+        // createElement + textContent — Module 3 DOM manipulation
+        var li = document.createElement("li");
+
+        var nameSpan = document.createElement("span");
+        nameSpan.className = "session-name";
+        nameSpan.textContent = session.name;
+
+        var trackSpan = document.createElement("span");
+        trackSpan.className = "session-track";
+        trackSpan.textContent = session.track;
+
+        li.appendChild(nameSpan);
+        li.appendChild(trackSpan);
+        list.appendChild(li); // appendChild — Module 3
+      }
+    }
+
+
+    // ---- 3. POPULATE SPEAKERS (Module 3 — loop + DOM) ----
+
+    function loadSpeakers() {
+      var grid = document.getElementById("speakers-grid");
+
+      for (var i = 0; i < speakers.length; i++) {
+        var speaker = speakers[i];
+
+        // HTML5 figure + figcaption elements created by JS — Module 2 + 3
+        var figure = document.createElement("figure");
+        figure.className = "speaker-card";
+
+        var avatar = document.createElement("div");
+        avatar.className = "avatar";
+        avatar.textContent = speaker.initials;
+
+        var caption = document.createElement("figcaption");
+        caption.innerHTML =
+          "<strong>" + speaker.name + "</strong>" + speaker.topic;
+
+        figure.appendChild(avatar);
+        figure.appendChild(caption);
+        grid.appendChild(figure);
+      }
+    }
+
+
+    // ---- 4. REGISTER FORM (ContosoConf — validation + DOM feedback) ----
+
+    function handleRegister() {
+      var firstName = document.getElementById("firstName").value;
+      var lastName  = document.getElementById("lastName").value;
+      var email     = document.getElementById("email").value;
+      var password  = document.getElementById("password").value;
+      var confirm   = document.getElementById("confirmPassword").value;
+
+      // Conditional statements — Module 3
+      if (firstName === "" || lastName === "" || email === "" || password === "") {
+        alert("Please fill in all required fields.");
+        return;
+      }
+
+      // Password length check — ContosoConf validation (min 5 chars)
+      if (password.length < 5) {
+        alert("Password must be at least 5 characters.");
+        return;
+      }
+
+      // Password match check — ContosoConf confirm password validation
+      if (password !== confirm) {
+        alert("Passwords do not match. Please try again.");
+        return;
+      }
+
+      // Show confirmation — DOM manipulation (Module 3)
+      var msg  = document.getElementById("confirmationMsg");
+      var name = document.getElementById("registeredName");
+      name.textContent = firstName + " " + lastName;
+      msg.style.display = "block";
+    }
+
+    // addEventListener — Module 3 DOM events
+    document.getElementById("registerBtn")
+      .addEventListener("click", handleRegister);
+
+
+    // ---- 5. LIVE Q&A (ContosoConf live page — JS adds questions to DOM) ----
+
+    function submitQuestion() {
+      var input    = document.getElementById("questionInput");
+      var question = input.value;
+
+      // Conditional — Module 3
+      if (question === "") {
+        alert("Please type a question first!");
+        return;
+      }
+
+      var list = document.getElementById("questions-list");
+
+      // Create new list item and add to DOM — Module 3 DOM manipulation
+      var li = document.createElement("li");
+      li.textContent = question;
+      list.appendChild(li);
+
+      // Clear the input after submitting
+      input.value = "";
+    }
+
+    document.getElementById("askBtn")
+      .addEventListener("click", submitQuestion);
+
+    // Also allow pressing Enter to submit a question
+    document.getElementById("questionInput")
+      .addEventListener("keypress", function(event) {
+        if (event.key === "Enter") {
+          submitQuestion();
+        }
+      });
+
+
+    // ---- 6. RUN ON PAGE LOAD ----
+    // Calling the functions — Module 3 functions
+    loadSchedule();
+    loadSpeakers();
+
+  </script>
+
+</body>
+</html>

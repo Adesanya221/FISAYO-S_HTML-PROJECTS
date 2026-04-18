@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Lesson 2 – The DOM | Fisayo</title>
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 750px; margin: 40px auto; padding: 0 20px; background: #f5f5f5; }
+    h1 { color: #1a1a2e; }
+    h2 { color: #1a1a2e; border-bottom: 2px solid #e94560; padding-bottom: 6px; margin-top: 40px; }
+    .box { background: white; border: 1px solid #ddd; border-radius: 6px; padding: 20px; margin-top: 12px; }
+    .output { background: #f0f0f0; padding: 12px 16px; border-radius: 6px; margin-top: 10px; min-height: 40px; font-size: 15px; }
+
+    /* Input + button styling */
+    input[type="text"] {
+      padding: 9px 12px; border: 1px solid #ccc; border-radius: 4px;
+      font-size: 15px; width: 260px; font-family: Arial, sans-serif;
+    }
+    button {
+      padding: 9px 20px; background: #e94560; color: white; border: none;
+      border-radius: 4px; font-size: 15px; cursor: pointer; margin-left: 8px;
+    }
+    button:hover { background: #c73652; }
+    button.remove-btn {
+      background: #888; padding: 4px 12px; font-size: 13px; margin-left: 10px;
+    }
+    button.remove-btn:hover { background: #555; }
+
+    /* Venue list */
+    #venue-list { list-style: none; padding: 0; margin-top: 12px; }
+    #venue-list li {
+      background: white; border: 1px solid #ddd; border-left: 4px solid #e94560;
+      padding: 10px 14px; margin-bottom: 8px; border-radius: 0 4px 4px 0;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+
+    /* Help icon */
+    .help-icon {
+      display: inline-block; width: 28px; height: 28px; background: #1a1a2e;
+      color: white; border-radius: 50%; text-align: center; line-height: 28px;
+      font-weight: bold; cursor: pointer; font-size: 16px; margin-left: 10px;
+    }
+    .tooltip {
+      display: none; background: #1a1a2e; color: white; padding: 8px 14px;
+      border-radius: 4px; font-size: 14px; margin-top: 8px; max-width: 300px;
+    }
+
+    /* Highlight effect */
+    .highlight {
+      background-color: #fff3cd !important;
+      border-color: #e94560 !important;
+      transition: background-color 0.3s;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Fisayo's DOM Lesson 2 Playground</h1>
+
+  <!-- ================================
+       1. FINDING ELEMENTS IN THE DOM
+       getElementById, getElementsByName
+  ================================= -->
+  <h2>1. Finding Elements in the DOM</h2>
+  <div class="box">
+    <p>Type your name and click the button — JavaScript finds the input by its ID and reads its value.</p>
+    <input type="text" id="nameInput" placeholder="Type your name..." />
+    <button id="greetBtn">Greet Me</button>
+    <!-- This div is found by JS and its content is changed -->
+    <div class="output" id="greet-output">Your greeting will appear here...</div>
+  </div>
+
+  <script>
+    // getElementById — finds one specific element by its id attribute
+    // This is the most common and fastest DOM method
+    document.getElementById("greetBtn").addEventListener("click", function() {
+      var nameInput = document.getElementById("nameInput");
+      var output    = document.getElementById("greet-output");
+
+      var name = nameInput.value;
+
+      // Conditional — Module 3
+      if (name === "") {
+        output.textContent = "Please type your name first!";
+        return;
+      }
+
+      // textContent — safely sets text in an element (no HTML)
+      output.textContent = "Welcome to the DOM, " + name + "! You just read a value from the page.";
+    });
+  </script>
+
+
+  <!-- ================================
+       2. ADDING & REMOVING DOM ELEMENTS
+       createElement, appendChild, removeChild
+       (Like ContosoConf VenueList example)
+  ================================= -->
+  <h2>2. Adding &amp; Removing Elements</h2>
+  <div class="box">
+    <p>This is exactly how the ContosoConf venue list worked. The list starts in HTML — JavaScript adds and removes rooms dynamically.</p>
+    <input type="text" id="roomInput" placeholder="e.g. Room D" />
+    <button id="addRoomBtn">Add Room</button>
+
+    <!-- This is the list from the module — starts with items, JS modifies it -->
+    <ul id="VenueList">
+      <li>
+        <span>Room A</span>
+        <button class="remove-btn" onclick="removeRoom(this)">Remove</button>
+      </li>
+      <li>
+        <span>Room B</span>
+        <button class="remove-btn" onclick="removeRoom(this)">Remove</button>
+      </li>
+    </ul>
+  </div>
+
+  <script>
+    // ADD a new room — createElement + appendChild (Module 3 DOM)
+    document.getElementById("addRoomBtn").addEventListener("click", function() {
+      var input   = document.getElementById("roomInput");
+      var newRoom = input.value;
+
+      if (newRoom === "") {
+        alert("Please type a room name!");
+        return;
+      }
+
+      var list = document.getElementById("VenueList");
+
+      // createElement — creates a new li element in memory
+      var newItem = document.createElement("li");
+
+      // createElement for the span inside
+      var span = document.createElement("span");
+      span.textContent = newRoom;
+
+      // createElement for the remove button
+      var removeBtn = document.createElement("button");
+      removeBtn.textContent = "Remove";
+      removeBtn.className   = "remove-btn";
+      // anonymous function as event handler — Module 3
+      removeBtn.onclick = function() { removeRoom(this); };
+
+      // Build the li: span + button inside li
+      newItem.appendChild(span);
+      newItem.appendChild(removeBtn);
+
+      // appendChild — adds it as the last child of the list
+      list.appendChild(newItem);
+
+      // Clear input after adding
+      input.value = "";
+    });
+
+    // REMOVE a room — removeChild needs the parent node
+    function removeRoom(btn) {
+      // parentNode — gets the li that contains this button
+      var listItem = btn.parentNode;
+      // parentNode again — gets the ul that contains the li
+      var list = listItem.parentNode;
+      // removeChild — removes the li from the ul
+      list.removeChild(listItem);
+    }
+  </script>
+
+
+  <!-- ================================
+       3. MODIFYING EXISTING ELEMENTS
+       textContent, innerHTML, style
+  ================================= -->
+  <h2>3. Modifying Existing Elements</h2>
+  <div class="box">
+    <p>Click the buttons below to change what's on the page — without reloading.</p>
+
+    <div class="output" id="modify-output">
+      Fisayo is learning JavaScript.
+    </div>
+
+    <div style="margin-top: 12px; display: flex; gap: 10px; flex-wrap: wrap;">
+      <button onclick="changeText()">Change Text</button>
+      <button onclick="changeColor()">Change Color</button>
+      <button onclick="highlightBox()">Highlight</button>
+      <button onclick="resetBox()">Reset</button>
+    </div>
+  </div>
+
+  <script>
+    function changeText() {
+      // textContent — changes the text of an element
+      var box = document.getElementById("modify-output");
+      box.textContent = "Fisayo now understands DOM manipulation!";
+    }
+
+    function changeColor() {
+      // Accessing the style property directly
+      var box = document.getElementById("modify-output");
+      box.style.color     = "#e94560";
+      box.style.fontWeight = "bold";
+    }
+
+    function highlightBox() {
+      // Adding a CSS class dynamically — classList.add
+      var box = document.getElementById("modify-output");
+      box.classList.add("highlight");
+    }
+
+    function resetBox() {
+      // Reset everything back
+      var box = document.getElementById("modify-output");
+      box.textContent      = "Fisayo is learning JavaScript.";
+      box.style.color      = "";
+      box.style.fontWeight = "";
+      box.classList.remove("highlight");
+    }
+  </script>
+
+
+  <!-- ================================
+       4. HANDLING EVENTS
+       addEventListener, mouseover, click
+       (From ContosoConf helpIcon example)
+  ================================= -->
+  <h2>4. Handling Events in the DOM</h2>
+  <div class="box">
+    <p>
+      Hover over the help icon to see the tooltip — this is the exact
+      <code>onmouseover</code> example from the module.
+      <span class="help-icon" id="helpIcon">?</span>
+    </p>
+    <div class="tooltip" id="helpTooltip">
+      The DOM lets you attach JavaScript actions to any HTML event —
+      clicks, hovers, keypresses and more!
+    </div>
+
+    <p style="margin-top: 20px;">Click anywhere in the box below — then see event bubbling in action:</p>
+    <div id="outerDiv" style="background:#e8e8ff; padding:20px; border-radius:6px; cursor:pointer;">
+      Outer DIV
+      <button id="innerBtn" style="display:block; margin-top:10px;">Inner Button</button>
+    </div>
+    <div class="output" id="event-output">Click the button or the outer div...</div>
+  </div>
+
+  <script>
+    // MOUSEOVER event — from the module's helpIcon example
+    var helpIcon    = document.getElementById("helpIcon");
+    var helpTooltip = document.getElementById("helpTooltip");
+
+    // addEventListener — attaches a function to an event
+    helpIcon.addEventListener("mouseover", function() {
+      helpTooltip.style.display = "block";
+    });
+
+    // mouseout — hides the tooltip when mouse leaves
+    helpIcon.addEventListener("mouseout", function() {
+      helpTooltip.style.display = "none";
+    });
+
+    // EVENT BUBBLING DEMO
+    // The click fires on the button AND bubbles up to the outer div
+    var outerDiv  = document.getElementById("outerDiv");
+    var innerBtn  = document.getElementById("innerBtn");
+    var eventOut  = document.getElementById("event-output");
+
+    innerBtn.addEventListener("click", function(event) {
+      eventOut.textContent = "Inner button clicked! Event now bubbles up to the outer div...";
+      // event.stopPropagation() — would STOP the bubbling if uncommented
+      // event.stopPropagation();
+    });
+
+    outerDiv.addEventListener("click", function() {
+      eventOut.textContent += " → Outer div also received the click event! (That's bubbling)";
+    });
+  </script>
+
+
+  <!-- ================================
+       5. THE FULL DOM EXAMPLE FROM MODULE
+       Binding an action to a button click
+       (Exact example from page 3-18)
+  ================================= -->
+  <h2>5. Full Example — Binding an Action to a Button (From the Module)</h2>
+  <div class="box">
+    <p>This is the exact example from page 3-18 of your module — personalised for Fisayo.</p>
+    <label>Write Your Name:
+      <input type="text" id="NameBox" placeholder="Type here..." />
+    </label>
+    <button id="submitBtn" style="display:block; margin-top:10px;">Click to Submit</button>
+    <div id="thankYouArea"></div>
+  </div>
+
+  <script>
+    // This is the sayThankYou function from the module — personalised
+    function sayThankYou() {
+      var userName = document.getElementById("NameBox").value;
+
+      if (userName === "") {
+        alert("Please write your name first!");
+        return;
+      }
+
+      // createElement — creates a new paragraph
+      var thankYou = document.createElement("p");
+      thankYou.textContent = "Thank you " + userName + " — you just used the DOM!";
+      thankYou.style.color      = "#e94560";
+      thankYou.style.fontWeight = "bold";
+      thankYou.style.marginTop  = "10px";
+
+      // appendChild — adds the new paragraph to the thankYouArea div
+      document.getElementById("thankYouArea").appendChild(thankYou);
+    }
+
+    // addEventListener — attaches sayThankYou to the click event
+    document.getElementById("submitBtn").addEventListener("click", sayThankYou);
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <link rel="stylesheet" href="./indexbody.html">
+  <title>ContosoConf – Session Voter</title>
+
+  <!-- jQuery CDN (Module 3b) -->
+  <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.7.1.min.js"></script>
+
+  <style>
+    /* ============================================
+       MODULE 2 – CSS3 TEXT & BACKGROUND STYLES
+       ============================================ */
+
+    /* Google Font import */
+    @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Barlow:wght@400;600;700&display=swap');
+
+    /* CSS Variables for consistent theming */
+    :root {
+      --bg-dark:      #0b0f1a;
+      --bg-card:      #111827;
+      --border:       #1e2d45;
+      --accent:       #00d4ff;
+      --accent-glow:  rgba(0, 212, 255, 0.18);
+      --hot:          #ff4e50;
+      --hot-glow:     rgba(255, 78, 80, 0.2);
+      --text-primary: #e8f0fe;
+      --text-muted:   #6b7fa3;
+      --font-mono:    'Share Tech Mono', monospace;
+      --font-body:    'Barlow', sans-serif;
+    }
+
+    /* ── Box Model reset ── */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    /* ── Body – background + typography ── */
+    body {
+      font-family: var(--font-body);
+      font-size: 16px;
+      line-height: 1.6;
+      color: var(--text-primary);
+
+      /* CSS background properties (Module 2) */
+      background-color: var(--bg-dark);
+      background-image:
+        radial-gradient(ellipse at 20% 10%, rgba(0,212,255,0.06) 0%, transparent 55%),
+        radial-gradient(ellipse at 80% 80%, rgba(255,78,80,0.05) 0%, transparent 55%);
+      background-attachment: fixed;
+      background-repeat: no-repeat;
+
+      min-height: 100vh;
+      padding: 40px 20px 60px;
+    }
+
+    /* ── Page header ── */
+    header {
+      text-align: center;
+      margin: 0 auto 48px;
+      max-width: 780px;
+    }
+
+    .logo-tag {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 4px;           /* letter-spacing (Module 2) */
+      text-transform: uppercase;     /* text-transform (Module 2) */
+      color: var(--accent);
+      margin-bottom: 12px;
+    }
+
+    header h1 {
+      font-size: 2.6rem;
+      font-weight: 700;
+      line-height: 1.2;              /* line-height (Module 2) */
+      letter-spacing: -1px;
+      color: var(--text-primary);
+    }
+
+    header h1 span {
+      color: var(--accent);
+    }
+
+    header p {
+      margin-top: 12px;
+      font-size: 1rem;
+      color: var(--text-muted);
+    }
+
+    /* ── Stats bar ── */
+    .stats-bar {
+      display: flex;
+      justify-content: center;
+      gap: 32px;
+      max-width: 780px;
+      margin: 0 auto 36px;
+      padding: 16px 24px;
+      background-color: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+    }
+
+    .stat {
+      text-align: center;
+    }
+
+    .stat-value {
+      font-family: var(--font-mono);
+      font-size: 1.6rem;
+      color: var(--accent);
+    }
+
+    .stat-label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--text-muted);
+    }
+
+    /* ── Session grid ── */
+    #session-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 20px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    /* ── Session card (CSS Box Model – Module 2) ── */
+    .session-card {
+      background-color: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+
+      /* Box model: padding, margin, border */
+      padding: 24px;
+      margin: 0;
+
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+      cursor: default;
+    }
+
+    .session-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--accent), transparent);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .session-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(0, 212, 255, 0.35);
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(0,212,255,0.08);
+    }
+
+    .session-card:hover::before { opacity: 1; }
+
+    /* ── Popular badge (shown by JS conditional) ── */
+    .session-card.popular {
+      border-color: var(--hot);
+      box-shadow: 0 0 20px var(--hot-glow);
+    }
+
+    .session-card.popular::before {
+      background: linear-gradient(90deg, var(--hot), transparent);
+      opacity: 1;
+    }
+
+    .popular-badge {
+      display: none;
+      position: absolute;
+      top: 14px; right: 14px;
+      background-color: var(--hot);
+      color: #fff;
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border-radius: 4px;
+    }
+
+    .session-card.popular .popular-badge { display: block; }
+
+    /* ── Card content ── */
+    .session-track {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 8px;
+    }
+
+    .session-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 8px;
+      line-height: 1.35;
+    }
+
+    .session-speaker {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      margin-bottom: 20px;
+    }
+
+    /* ── Vote row ── */
+    .vote-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    /* ── Vote button ── */
+    .btn-vote {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--accent);
+      background: transparent;
+      border: 1px solid var(--accent);
+      border-radius: 5px;
+
+      /* Box model */
+      padding: 9px 20px;
+      margin: 0;
+
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+    }
+
+    .btn-vote:hover {
+      background-color: var(--accent);
+      color: var(--bg-dark);
+      box-shadow: 0 0 14px var(--accent-glow);
+    }
+
+    .btn-vote:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+    }
+
+    /* ── Vote count display ── */
+    .vote-count {
+      font-family: var(--font-mono);
+      font-size: 1.1rem;
+      color: var(--text-primary);
+    }
+
+    .vote-count span {
+      color: var(--accent);
+      font-size: 1.4rem;
+    }
+
+    /* ── Progress bar ── */
+    .vote-bar-track {
+      flex: 1;
+      height: 4px;
+      background-color: var(--border);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .vote-bar-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--accent), #7affef);
+      border-radius: 2px;
+      transition: width 0.4s ease;
+    }
+
+    .session-card.popular .vote-bar-fill {
+      background: linear-gradient(90deg, var(--hot), #ffb347);
+    }
+
+    /* ── Reset button ── */
+    .reset-wrap {
+      text-align: center;
+      margin-top: 40px;
+    }
+
+    .btn-reset {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      padding: 10px 24px;
+      cursor: pointer;
+      transition: color 0.2s, border-color 0.2s;
+    }
+
+    .btn-reset:hover {
+      color: var(--hot);
+      border-color: var(--hot);
+    }
+
+    /* ── Toast notification ── */
+    #toast {
+      position: fixed;
+      bottom: 28px;
+      left: 50%;
+      transform: translateX(-50%) translateY(80px);
+      background: var(--bg-card);
+      border: 1px solid var(--accent);
+      color: var(--accent);
+      font-family: var(--font-mono);
+      font-size: 13px;
+      letter-spacing: 1px;
+      padding: 12px 28px;
+      border-radius: 6px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+      opacity: 0;
+      transition: transform 0.35s ease, opacity 0.35s ease;
+      z-index: 999;
+      white-space: nowrap;
+    }
+
+    #toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    /* ── Footer ── */
+    footer {
+      text-align: center;
+      margin-top: 56px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 2px;
+      color: var(--text-muted);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===== HEADER ===== -->
+  <header>
+    <p class="logo-tag">// ContosoConf 2024</p>
+    <h1>Session <span>Voter</span></h1>
+    <p>Vote for the sessions you want to attend. Top sessions get the main stage.</p>
+  </header>
+
+  <!-- ===== STATS BAR ===== -->
+  <div class="stats-bar">
+    <div class="stat">
+      <div class="stat-value" id="total-votes">0</div>
+      <div class="stat-label">Total Votes</div>
+    </div>
+    <div class="stat">
+      <div class="stat-value" id="sessions-count">0</div>
+      <div class="stat-label">Sessions</div>
+    </div>
+    <div class="stat">
+      <div class="stat-value" id="popular-count">0</div>
+      <div class="stat-label">🔥 Popular</div>
+    </div>
+  </div>
+
+  <!-- ===== SESSION GRID (built by JS loop) ===== -->
+  <div id="session-grid"></div>
+
+  <!-- ===== RESET ===== -->
+  <div class="reset-wrap">
+    <button class="btn-reset" id="btn-reset">↺ Reset All Votes</button>
+  </div>
+
+  <!-- ===== TOAST ===== -->
+  <div id="toast"></div>
+
+  <!-- ===== FOOTER ===== -->
+  <footer>
+    <p>// Built with HTML5 · CSS3 · JavaScript · jQuery</p>
+  </footer>
+
+
+  <script type="text/javascript">
+
+    /* ============================================================
+       MODULE 3a – JAVASCRIPT: JSON, Variables, Functions, Loops,
+                               Conditionals
+       MODULE 3b – jQuery: Selectors, DOM Manipulation, Events
+       ============================================================ */
+
+    // ── JSON Array of session objects (Module 3a – JSON / Arrays) ──
+    var sessions = [
+      {
+        "id"      : 1,
+        "track"   : "Track A · Web",
+        "title"   : "Building Responsive Layouts with CSS Grid & Flexbox",
+        "speaker" : "Amina Osei",
+        "votes"   : 0
+      },
+      {
+        "id"      : 2,
+        "track"   : "Track B · JavaScript",
+        "title"   : "Mastering the DOM: From Vanilla JS to jQuery",
+        "speaker" : "Emeka Nwosu",
+        "votes"   : 0
+      },
+      {
+        "id"      : 3,
+        "track"   : "Track A · Web",
+        "title"   : "CSS3 Animations and Transitions in the Real World",
+        "speaker" : "Priya Sharma",
+        "votes"   : 0
+      },
+      {
+        "id"      : 4,
+        "track"   : "Track C · APIs",
+        "title"   : "AJAX & Fetch: Making Async Requests with JavaScript",
+        "speaker" : "Tunde Adeyemi",
+        "votes"   : 0
+      },
+      {
+        "id"      : 5,
+        "track"   : "Track B · JavaScript",
+        "title"   : "JavaScript Objects, Prototypes, and JSON Deep Dive",
+        "speaker" : "Saoirse Brennan",
+        "votes"   : 0
+      },
+      {
+        "id"      : 6,
+        "track"   : "Track C · APIs",
+        "title"   : "Introduction to RESTful Web Services for Front-End Devs",
+        "speaker" : "Yemi Adegoke",
+        "votes"   : 0
+      }
+    ];
+
+    // ── Constants (Module 3a – Variables) ──
+    var POPULAR_THRESHOLD = 5;   // votes needed to mark session as popular
+    var MAX_VOTES         = 10;  // max votes per session (for progress bar width)
+
+    // ── renderSessions(): uses a for loop to build cards (Module 3a) ──
+    function renderSessions() {
+
+      var grid = $("#session-grid");  // jQuery selector (Module 3b)
+      grid.empty();                   // jQuery DOM manipulation (Module 3b)
+
+      // for loop (Module 3a) – iterate over sessions JSON array
+      for (var i = 0; i < sessions.length; i++) {
+
+        var s = sessions[i];
+
+        // Conditional statement (Module 3a) – check popularity
+        var isPopular     = (s.votes >= POPULAR_THRESHOLD);
+        var popularClass  = isPopular ? "popular" : "";
+        var barWidth      = Math.min((s.votes / MAX_VOTES) * 100, 100);
+        var btnDisabled   = (s.votes >= MAX_VOTES) ? "disabled" : "";
+
+        // Build card HTML string (Module 3a – String concatenation)
+        var cardHTML =
+          '<div class="session-card ' + popularClass + '" data-id="' + s.id + '">' +
+            '<div class="popular-badge">🔥 Popular</div>' +
+            '<div class="session-track">' + s.track + '</div>' +
+            '<div class="session-title">' + s.title + '</div>' +
+            '<div class="session-speaker">// ' + s.speaker + '</div>' +
+            '<div class="vote-row">' +
+              '<button class="btn-vote" ' + btnDisabled + '>▲ Vote</button>' +
+              '<div class="vote-count"><span>' + s.votes + '</span> votes</div>' +
+              '<div class="vote-bar-track">' +
+                '<div class="vote-bar-fill" style="width:' + barWidth + '%"></div>' +
+              '</div>' +
+            '</div>' +
+          '</div>';
+
+        // jQuery .append() – Module 3b DOM manipulation
+        grid.append(cardHTML);
+      }
+
+      updateStats();
+    }
+
+    // ── updateStats(): updates the stats bar using jQuery (Module 3b) ──
+    function updateStats() {
+
+      // Variables (Module 3a)
+      var totalVotes   = 0;
+      var popularCount = 0;
+
+      // for loop (Module 3a) – tally votes
+      for (var i = 0; i < sessions.length; i++) {
+        totalVotes += sessions[i].votes;
+
+        // Conditional (Module 3a)
+        if (sessions[i].votes >= POPULAR_THRESHOLD) {
+          popularCount++;
+        }
+      }
+
+      // jQuery selectors + .html() – Module 3b
+      $("#total-votes").html(totalVotes);
+      $("#popular-count").html(popularCount);
+      $("#sessions-count").html(sessions.length);
+    }
+
+    // ── showToast(): displays a temporary message (Module 3a – Functions) ──
+    function showToast(message) {
+      var $toast = $("#toast");           // jQuery selector (Module 3b)
+      $toast.html(message);
+      $toast.addClass("show");           // jQuery addClass (Module 3b)
+
+      // setTimeout – remove toast after 2.2 seconds
+      setTimeout(function () {
+        $toast.removeClass("show");      // jQuery removeClass (Module 3b)
+      }, 2200);
+    }
+
+    // ── findSessionById(): returns a session object by id ──
+    function findSessionById(id) {
+      for (var i = 0; i < sessions.length; i++) {
+        if (sessions[i].id === id) {
+          return sessions[i];
+        }
+      }
+      return null;
+    }
+
+    // ============================================================
+    //  jQuery document.ready (Module 3b)
+    //  All event handlers go inside here so the DOM is fully loaded
+    // ============================================================
+    $(document).ready(function () {
+
+      // ── Render cards on page load ──
+      renderSessions();
+
+      // ── Vote button click (jQuery event binding – Module 3b) ──
+      // Using .on() with event delegation since cards are dynamic
+      $("#session-grid").on("click", ".btn-vote", function () {
+
+        // jQuery traversal – get parent card (Module 3b)
+        var $card   = $(this).closest(".session-card");
+        var id      = parseInt($card.attr("data-id"));  // parseInt (Module 3a)
+        var session = findSessionById(id);
+
+        if (session === null) { return; }
+
+        // Conditional (Module 3a) – guard against over-voting
+        if (session.votes >= MAX_VOTES) {
+          showToast("// Max votes reached for this session.");
+          return;
+        }
+
+        // Increment vote (Module 3a – operators)
+        session.votes++;
+
+        // Re-render all cards to reflect new state
+        renderSessions();
+
+        // Conditional (Module 3a) – notify if session just hit threshold
+        if (session.votes === POPULAR_THRESHOLD) {
+          showToast("🔥 '" + session.title.substring(0, 30) + "...' just went popular!");
+        } else {
+          showToast("// Vote recorded for: " + session.speaker);
+        }
+      });
+
+      // ── Reset button click (jQuery .click() – Module 3b) ──
+      $("#btn-reset").click(function () {
+
+        // for loop (Module 3a) – reset all votes to 0
+        for (var i = 0; i < sessions.length; i++) {
+          sessions[i].votes = 0;
+        }
+
+        renderSessions();
+        showToast("// All votes have been reset.");
+      });
+
+    }); // end document.ready
+
+  </script>
+</body>
+</html>
